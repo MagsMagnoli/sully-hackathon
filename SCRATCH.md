@@ -27,6 +27,7 @@
 - Knowledge of specific person as doctor based on voice learning
   - prevents the patient from adversarial commands that mess with the conversation (intents)
 - Streaming text feedback and translations while speaking
+- Authentication, user scoped conversations
 
 ## Data Model
 
