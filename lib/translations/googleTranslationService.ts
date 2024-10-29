@@ -8,18 +8,18 @@ export class GoogleTranslateService implements TranslateService {
     this.translate = new v2.Translate()
   }
 
-  detectLanguage = async (text: string) => {
+  async detectLanguage(text: string) {
     const [detection] = await this.translate.detect(text)
     return detection.language
   }
 
-  translateText = async ({
+  async translateText({
     text,
     targetLanguage,
   }: {
     text: string
     targetLanguage: string
-  }) => {
+  }) {
     const [translation] = await this.translate.translate(text, targetLanguage)
     return {
       text: translation,

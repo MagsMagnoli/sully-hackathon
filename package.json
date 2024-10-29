@@ -11,6 +11,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@ai-sdk/openai": "0.0.70",
     "@google-cloud/translate": "8.5.0",
     "@radix-ui/react-dialog": "1.1.2",
     "@radix-ui/react-icons": "1.3.0",
@@ -20,14 +21,17 @@
     "@ricky0123/vad-react": "0.0.25",
     "@steeze-ui/lucide-icons": "1.3.0",
     "@steeze-ui/react-icon": "1.0.5",
+    "ai": "3.4.27",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "lucide-react": "0.453.0",
     "next": "15.0.1",
+    "openai": "4.68.4",
     "react": "19.0.0-rc-69d4b800-20241021",
     "react-dom": "19.0.0-rc-69d4b800-20241021",
     "tailwind-merge": "2.5.4",
-    "tailwindcss-animate": "1.0.7"
+    "tailwindcss-animate": "1.0.7",
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@playwright/test": "1.48.2",
