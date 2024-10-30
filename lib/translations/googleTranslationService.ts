@@ -5,7 +5,9 @@ export class GoogleTranslationService implements TranslationService {
   private translate: v2.Translate
 
   constructor() {
-    this.translate = new v2.Translate()
+    this.translate = new v2.Translate({
+      apiKey: process.env.GOOGLE_TRANSLATE_API_KEY,
+    })
   }
 
   async detectLanguage(text: string) {

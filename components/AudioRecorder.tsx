@@ -1,6 +1,7 @@
 'use client'
 
 import { useMicVAD, utils } from '@ricky0123/vad-react'
+import { Mic } from 'lucide-react'
 
 export const AudioRecorder = ({
   onSpeechEnd,
@@ -22,5 +23,12 @@ export const AudioRecorder = ({
     },
   })
 
-  return <div>{vad.userSpeaking && 'User is speaking'}</div>
+  return (
+    <div className="flex justify-center w-full">
+      <Mic
+        className={vad.userSpeaking ? 'animate-pulse text-red-500' : ''}
+        size={32}
+      />
+    </div>
+  )
 }

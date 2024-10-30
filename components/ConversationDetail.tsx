@@ -1,3 +1,5 @@
+'use client'
+
 import { AudioRecorder } from '@/components/AudioRecorder'
 import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 import { Button } from '@/components/ui/button'
@@ -5,6 +7,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -163,47 +166,43 @@ export const ConversationDetail = () => {
     <>
       <audio ref={audioRef} className="hidden"></audio>
       {data?.conversationStatus === 'open' && (
-        <>
-          <EndConversationButton
-            loading={isEndingConversation}
-            onClick={async () => await endConversationMutation()}
-          />
-          <AudioRecorder
-            onSpeechEnd={async (audio) => {
-              if (conversationId) {
-                const response = await createMessageMutation.mutateAsync(audio)
-
-                if ('intent' in response) {
-                  if (response.intent === 'bargeIn') {
-                    audioRef.current?.pause()
-                  } else if (response.intent === 'repeatThat') {
-                    if (audioRef.current) {
-                      audioRef.current.currentTime = 0
-                      audioRef.current.play()
-                    }
-                  }
-                } else {
-                  await refetch() // TODO: replace with cache change
-                  const audio = await ttsMutation.mutateAsync(
-                    response.message.translatedText,
-                  )
-                  const audioUrl = URL.createObjectURL(audio)
-
-                  if (audioRef.current) {
-                    audioRef.current.src = audioUrl
-                    audioRef.current.play()
-                  }
-                }
-              } else {
-                const response = await createConversationMutation.mutateAsync(
-                  audio,
-                )
-                router.replace(`/c/${response.conversation.id}`)
-              }
-            }}
-          />
-        </>
+        <EndConversationButton
+          loading={isEndingConversation}
+          onClick={async () => await endConversationMutation()}
+        />
       )}
+      <AudioRecorder
+        onSpeechEnd={async (audio) => {
+          if (conversationId) {
+            const response = await createMessageMutation.mutateAsync(audio)
+
+            if ('intent' in response) {
+              if (response.intent === 'bargeIn') {
+                audioRef.current?.pause()
+              } else if (response.intent === 'repeatThat') {
+                if (audioRef.current) {
+                  audioRef.current.currentTime = 0
+                  audioRef.current.play()
+                }
+              }
+            } else {
+              await refetch() // TODO: replace with cache change
+              const audio = await ttsMutation.mutateAsync(
+                response.message.translatedText,
+              )
+              const audioUrl = URL.createObjectURL(audio)
+
+              if (audioRef.current) {
+                audioRef.current.src = audioUrl
+                audioRef.current.play()
+              }
+            }
+          } else {
+            const response = await createConversationMutation.mutateAsync(audio)
+            router.replace(`/c/${response.conversation.id}`)
+          }
+        }}
+      />
       {data?.conversationStatus}
       {data?.summary && <MarkdownRenderer content={data.summary} />}
       {!conversationId && (
@@ -232,28 +231,34 @@ const LanguageSelector = ({
 }) => {
   return (
     <div className="flex gap-2">
-      <Select value={doctorLanguage} onValueChange={onDoctorLanguageChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Doctor Language" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="en">English</SelectItem>
-          <SelectItem value="es">Spanish</SelectItem>
-          <SelectItem value="fr">French</SelectItem>
-          <SelectItem value="de">German</SelectItem>
-        </SelectContent>
-      </Select>
-      <Select value={patientLanguage} onValueChange={onPatientLanguageChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Patient Language" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="en">English</SelectItem>
-          <SelectItem value="es">Spanish</SelectItem>
-          <SelectItem value="fr">French</SelectItem>
-          <SelectItem value="de">German</SelectItem>
-        </SelectContent>
-      </Select>
+      <div>
+        <div className="text-xs">Doctor Language</div>
+        <Select value={doctorLanguage} onValueChange={onDoctorLanguageChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Doctor Language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="es">Spanish</SelectItem>
+            <SelectItem value="fr">French</SelectItem>
+            <SelectItem value="de">German</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <div className="text-xs">Patient Language</div>
+        <Select value={patientLanguage} onValueChange={onPatientLanguageChange}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Patient Language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">English</SelectItem>
+            <SelectItem value="es">Spanish</SelectItem>
+            <SelectItem value="fr">French</SelectItem>
+            <SelectItem value="de">German</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   )
 }

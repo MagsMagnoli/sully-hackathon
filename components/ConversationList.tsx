@@ -12,7 +12,9 @@ import { useQuery } from '@tanstack/react-query'
 import { AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 
-const fetchConversations = async (): Promise<Conversation[]> => {
+const fetchConversations = async (): Promise<{
+  conversations: Conversation[]
+}> => {
   const response = await fetch('/api/conversations')
   if (response.ok) {
     throw new Error('Failed to fetch conversations')
@@ -36,7 +38,7 @@ export const ConversationList = () => {
 
   return (
     <SidebarMenu data-testid="conversation-list">
-      {query.data?.map((conversation: Conversation) => (
+      {query.data?.conversations?.map((conversation: Conversation) => (
         <SidebarMenuItem key={conversation.id}>
           <SidebarMenuButton asChild>
             <Link href={`/c/${conversation.id}`}>
