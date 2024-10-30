@@ -22,6 +22,7 @@ export async function speechToMessage({
   const speechToTextService = createSpeechToTextService(
     featureFlagService.speechToTextProvider(),
   )
+  const filePath = '' // TODO: asdfas
   const text = await speechToTextService.generateText(filePath)
   const intentService = createIntentService(featureFlagService.intentProvider())
   const intent = await intentService.detectIntent(text)
@@ -39,13 +40,13 @@ export async function speechToMessage({
   let translatedLanguage
   let speaker: Speaker
 
-  if (textLanguage === conversation.doctor_language) {
-    language = conversation.doctor_language
-    translatedLanguage = conversation.patient_language
+  if (textLanguage === conversation.doctorLanguage) {
+    language = conversation.doctorLanguage
+    translatedLanguage = conversation.patientLanguage
     speaker = 'doctor'
   } else {
-    language = conversation.patient_language
-    translatedLanguage = conversation.doctor_language
+    language = conversation.patientLanguage
+    translatedLanguage = conversation.doctorLanguage
     speaker = 'patient'
   }
 

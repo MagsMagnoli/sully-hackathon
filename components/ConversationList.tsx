@@ -39,7 +39,9 @@ export const ConversationList = () => {
       {query.data?.map((conversation: Conversation) => (
         <SidebarMenuItem key={conversation.id}>
           <SidebarMenuButton asChild>
-            <Link href={`/c/${conversation.id}`}>{conversation.name}</Link>
+            <Link href={`/c/${conversation.id}`}>
+              {conversation.createdAt.toISOString()}
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
