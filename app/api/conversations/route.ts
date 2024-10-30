@@ -27,15 +27,19 @@ export async function POST(request: Request) {
     patientLanguage,
   })
 
-  const message = await speechToMessage({
+  const response = await speechToMessage({
     conversation,
     base64Audio: audio,
   })
 
-  return Response.json({
-    conversation: {
-      ...conversation,
-      messages: [message],
-    },
-  })
+  if (response?.type === 'message') {
+    return Response.json({
+      conversation: {
+        ...conversation,
+        messages: [response.data],
+      },
+    })
+  }
+
+  return Response.json({ conversation })
 }

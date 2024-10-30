@@ -2,7 +2,7 @@ import { TextToSpeechService } from '@/lib/textToSpeech/textToSpeechService'
 import OpenAI from 'openai'
 
 export class OpenAITextToSpeechService implements TextToSpeechService {
-  async generateAudio(text: string): Promise<Blob> {
+  async generateAudio(text: string): Promise<ArrayBuffer> {
     const openai = new OpenAI()
     const response = await openai.audio.speech.create({
       model: 'tts-1',
@@ -10,6 +10,6 @@ export class OpenAITextToSpeechService implements TextToSpeechService {
       input: text,
     })
 
-    return response.blob()
+    return response.arrayBuffer()
   }
 }

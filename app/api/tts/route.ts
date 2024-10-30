@@ -26,8 +26,8 @@ export async function POST(request: Request) {
 
   return new Response(audio, {
     headers: {
-      'Content-Type': 'audio/mpeg',
-      'Content-Length': audio.size.toString(),
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': audio.byteLength.toString(),
     },
   })
 }

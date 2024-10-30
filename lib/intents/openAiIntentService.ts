@@ -33,6 +33,7 @@ const tools = {
       - stop speaking
     `,
     parameters: z.object({}),
+    execute: async () => ({ text: '' }),
   }),
   repeatThat: tool({
     description: `When the user wants to repeat the last message
@@ -42,6 +43,7 @@ const tools = {
      - say that again
     `,
     parameters: z.object({}),
+    execute: async () => ({ text: '' }),
   }),
 }
 
@@ -58,10 +60,13 @@ export class OpenAiIntentService implements IntentService {
       return null
     }
 
+    console.log('RESULTS', JSON.stringify(toolResults))
+
     const toolResult = toolResults[0]
 
     return {
       id: toolResult.toolCallId,
+      name: toolResult.toolName,
       parameters: toolResult.args,
       text: toolResult.result.text,
     }

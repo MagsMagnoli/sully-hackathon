@@ -5,5 +5,8 @@ import { conversations } from '../../db/schema'
 export async function getConversation(slug: string) {
   return db.query.conversations.findFirst({
     where: eq(conversations.id, slug),
+    with: {
+      messages: true,
+    },
   })
 }

@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 export type Intent = {
   id: string
+  name: string
   parameters: Record<string, string>
   text: string
 }

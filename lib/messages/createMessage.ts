@@ -28,13 +28,16 @@ export async function createMessage({
   translatedLanguage,
   intent,
 }: CreateMessageInput) {
-  return db.insert(messages).values({
-    conversationId,
-    text,
-    language,
-    speaker,
-    translatedText,
-    translatedLanguage,
-    intent,
-  })
+  return db
+    .insert(messages)
+    .values({
+      conversationId,
+      text,
+      language,
+      speaker,
+      translatedText,
+      translatedLanguage,
+      intent,
+    })
+    .returning()
 }

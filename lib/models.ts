@@ -28,14 +28,16 @@ const ConversationSchema = z.object({
 
 export type Conversation = z.infer<typeof ConversationSchema>
 
-export type IntentResponse = {
-  intent: string
-}
-
-export type MessageResponse = {
-  message: Message
-}
-
 export type ConversationResponse = {
   conversation: Conversation
 }
+
+export type CreateMessageResponse =
+  | {
+      type: 'intent'
+      data: string
+    }
+  | {
+      type: 'message'
+      data: Message
+    }

@@ -2,7 +2,7 @@ import { OpenAITextToSpeechService } from '@/lib/textToSpeech/openaiTextToSpeech
 import { z } from 'zod'
 
 export interface TextToSpeechService {
-  generateAudio(text: string): Promise<Blob>
+  generateAudio(text: string): Promise<ArrayBuffer>
 }
 
 export const textToSpeechProviders = z.enum(['openai'])

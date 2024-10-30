@@ -6,7 +6,10 @@ import {
 } from '@/lib/featureFlags/featureFlagService'
 import { createIntentService } from '@/lib/intents/intentService'
 import { createMessage } from '@/lib/messages/createMessage'
-import { createSpeechToTextService } from '@/lib/speechToText/speechToTextService'
+import {
+  createSpeechToTextService,
+  SpeechToTextService,
+} from '@/lib/speechToText/speechToTextService'
 import { createTranslationService } from '@/lib/translations/translationService'
 import crypto from 'crypto'
 import fs from 'fs'
@@ -28,27 +31,23 @@ export async function speechToMessage({
     featureFlagService.speechToTextProvider(),
   )
 
-  const dir = path.join(process.cwd(), 'public', 'audio')
+  const text = await fetchTextFromSpeech({
+    base64Audio,
+    speechToTextService,
+  })
 
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+  if (!text.length) {
+    return
   }
-
-  const audioBuffer = Buffer.from(base64Audio, 'base64')
-
-  const filePath = path.join(dir, `${crypto.randomUUID()}.mp3`)
-
-  fs.writeFileSync(filePath, audioBuffer)
-
-  const text = await speechToTextService.generateText(filePath)
-
-  fs.unlinkSync(filePath)
 
   const intentService = createIntentService(featureFlagService.intentProvider())
   const intent = await intentService.detectIntent(text)
 
-  if (intent?.id === 'bargeIn' || intent?.id === 'repeatThat') {
-    return Response.json({ intent: intent.id })
+  if (intent?.name === 'bargeIn' || intent?.name === 'repeatThat') {
+    return {
+      type: 'intent',
+      data: intent.name,
+    }
   }
 
   const translationService = createTranslationService(
@@ -75,7 +74,7 @@ export async function speechToMessage({
     targetLanguage: translatedLanguage,
   })
 
-  const message = await createMessage({
+  const [message] = await createMessage({
     conversationId: conversation.id,
     text,
     language,
@@ -85,5 +84,34 @@ export async function speechToMessage({
     intent,
   })
 
-  return message
+  return {
+    type: 'message',
+    data: message,
+  }
+}
+
+async function fetchTextFromSpeech({
+  base64Audio,
+  speechToTextService,
+}: {
+  base64Audio: string
+  speechToTextService: SpeechToTextService
+}) {
+  const dir = path.join(process.cwd(), 'public', 'audio')
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+  }
+
+  const audioBuffer = Buffer.from(base64Audio, 'base64')
+  const filePath = path.join(dir, `${crypto.randomUUID()}.mp3`)
+
+  try {
+    fs.writeFileSync(filePath, audioBuffer)
+
+    const text = await speechToTextService.generateText(filePath)
+    return text
+  } finally {
+    fs.unlinkSync(filePath)
+  }
 }

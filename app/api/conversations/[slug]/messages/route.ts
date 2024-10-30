@@ -21,10 +21,10 @@ export const POST = async (
     return new Response('Conversation not found', { status: 404 })
   }
 
-  const message = await speechToMessage({
+  const data = await speechToMessage({
     conversation,
     base64Audio: audio,
   })
 
-  return Response.json({ message })
+  return Response.json(data)
 }
