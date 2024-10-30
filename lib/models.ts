@@ -23,7 +23,7 @@ const ConversationSchema = z.object({
   patientLanguage: z.enum(language.enumValues),
   summary: z.string().nullable().optional(),
   messages: z.array(MessageSchema).optional(),
-  createdAt: z.date(),
+  createdAt: z.string(),
 })
 
 export type Conversation = z.infer<typeof ConversationSchema>

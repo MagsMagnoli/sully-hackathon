@@ -1,11 +1,11 @@
 import { Speaker } from '@/db/schema'
+import { createConversation } from '@/lib/conversations/createConversation'
 import {
   createFeatureFlagService,
   featureFlagProviders,
 } from '@/lib/featureFlags/featureFlagService'
 import { createIntentService } from '@/lib/intents/intentService'
 import { createMessage } from '@/lib/messages/createMessage'
-import { Conversation } from '@/lib/models'
 import { createSpeechToTextService } from '@/lib/speechToText/speechToTextService'
 import { createTranslationService } from '@/lib/translations/translationService'
 import crypto from 'crypto'
@@ -16,7 +16,7 @@ export async function speechToMessage({
   conversation,
   base64Audio,
 }: {
-  conversation: Conversation
+  conversation: Awaited<ReturnType<typeof createConversation>>[0]
   base64Audio: string
 }) {
   const featureFlagProvider = featureFlagProviders.parse(

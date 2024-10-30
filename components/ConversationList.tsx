@@ -16,9 +16,11 @@ const fetchConversations = async (): Promise<{
   conversations: Conversation[]
 }> => {
   const response = await fetch('/api/conversations')
-  if (response.ok) {
+
+  if (!response.ok) {
     throw new Error('Failed to fetch conversations')
   }
+
   return response.json()
 }
 
@@ -41,9 +43,7 @@ export const ConversationList = () => {
       {query.data?.conversations?.map((conversation: Conversation) => (
         <SidebarMenuItem key={conversation.id}>
           <SidebarMenuButton asChild>
-            <Link href={`/c/${conversation.id}`}>
-              {conversation.createdAt.toISOString()}
-            </Link>
+            <Link href={`/c/${conversation.id}`}>{conversation.createdAt}</Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       ))}
