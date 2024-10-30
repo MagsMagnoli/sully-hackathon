@@ -2,7 +2,7 @@ import { OpenAISpeechToTextService } from '@/lib/speechToText/openaiSpeechToText
 import { z } from 'zod'
 
 export interface SpeechToTextService {
-  generateText(text: string): Promise<string>
+  generateText(filePath: string): Promise<string>
 }
 
 export const speechToTextProviders = z.enum(['openai'])

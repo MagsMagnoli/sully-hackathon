@@ -25,6 +25,24 @@ const tools = {
       text: `Referral to ${specialistType} in ${location} sent`,
     }),
   }),
+  bargeIn: tool({
+    description: `When the user wants to interrupt the conversation
+
+    Examples:
+      - barge in
+      - stop speaking
+    `,
+    parameters: z.object({}),
+  }),
+  repeatThat: tool({
+    description: `When the user wants to repeat the last message
+    
+    Examples:
+     - repeat that
+     - say that again
+    `,
+    parameters: z.object({}),
+  }),
 }
 
 export class OpenAiIntentService implements IntentService {

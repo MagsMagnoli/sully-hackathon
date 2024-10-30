@@ -15,8 +15,11 @@ export async function createConversation({
   doctorLanguage,
   patientLanguage,
 }: CreateConversationInput) {
-  return db.insert(conversations).values({
-    doctor_language: doctorLanguage,
-    patient_language: patientLanguage,
-  })
+  return db
+    .insert(conversations)
+    .values({
+      doctorLanguage,
+      patientLanguage,
+    })
+    .returning()
 }

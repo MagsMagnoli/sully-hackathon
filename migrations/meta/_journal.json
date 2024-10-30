@@ -29,6 +29,13 @@
       "when": 1730298459277,
       "tag": "0003_early_miracleman",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1730302360308,
+      "tag": "0004_goofy_robin_chapel",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,5 @@
 import { getConversation } from '@/lib/conversations/getConversation'
+import { speechToMessage } from '@/lib/messages/speechToMessage'
 
 export const GET = async (
   _request: Request,
@@ -11,5 +12,9 @@ export const GET = async (
     return new Response('Conversation not found', { status: 404 })
   }
 
-  return Response.json({ conversation })
+  const message = await speechToMessage({
+    conversation,
+  })
+
+  return Response.json({ message })
 }
