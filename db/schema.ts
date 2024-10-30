@@ -7,6 +7,7 @@ import {
   uuid,
   varchar,
 } from 'drizzle-orm/pg-core'
+import { z } from 'zod'
 
 export const conversationStatus = pgEnum('conversation_status', [
   'open',
@@ -14,12 +15,19 @@ export const conversationStatus = pgEnum('conversation_status', [
 ])
 
 export const language = pgEnum('language', ['en', 'es', 'fr', 'de'])
+const LanguageSchema = z.enum(language.enumValues)
+export type Language = z.infer<typeof LanguageSchema>
+
+export const speaker = pgEnum('speakers', ['doctor', 'patient'])
+const SpeakerSchema = z.enum(speaker.enumValues)
+export type Speaker = z.infer<typeof SpeakerSchema>
 
 export const conversations = pgTable('conversations', {
   id: uuid().primaryKey().defaultRandom(),
   doctor_language: language().notNull(),
   patient_language: language().notNull(),
   conversationStatus: conversationStatus().notNull().default('open'),
+  summary: varchar(),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 })
 
@@ -37,6 +45,7 @@ export const messages = pgTable('messages', {
   translatedText: varchar().notNull(),
   translatedLanguage: language().notNull(),
   intent: jsonb(),
+  speaker: speaker().notNull(),
   createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
 })
 

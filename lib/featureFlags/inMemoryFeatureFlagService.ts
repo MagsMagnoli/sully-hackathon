@@ -1,5 +1,6 @@
 import { FeatureFlagService } from '@/lib/featureFlags/featureFlagService'
 import { IntentProvider, intentProviders } from '@/lib/intents/intentService'
+import { TextSummaryProvider } from '@/lib/textSummary/textSummaryService'
 import {
   TextToSpeechProvider,
   textToSpeechProviders,
@@ -12,6 +13,7 @@ import {
   SpeechToTextProvider,
   speechToTextProviders,
 } from '../speechToText/speechToTextService'
+import { textSummaryProviders } from '../textSummary/textSummaryService'
 
 export class InMemoryFeatureFlagService implements FeatureFlagService {
   textToSpeechProvider(): TextToSpeechProvider {
@@ -28,5 +30,9 @@ export class InMemoryFeatureFlagService implements FeatureFlagService {
 
   translationProvider(): TranslationProvider {
     return translationProviders.Enum.google
+  }
+
+  textSummaryProvider(): TextSummaryProvider {
+    return textSummaryProviders.Enum.openai
   }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "conversations" ALTER COLUMN "summary" DROP NOT NULL;
