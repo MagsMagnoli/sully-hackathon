@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "./scripts/dev.sh && next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
     "@ai-sdk/openai": "0.0.70",
@@ -23,9 +25,12 @@
     "ai": "3.4.27",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
+    "dotenv": "16.4.5",
+    "drizzle-orm": "0.36.0",
     "lucide-react": "0.453.0",
     "next": "15.0.1",
     "openai": "4.68.4",
+    "postgres": "3.4.5",
     "react": "19.0.0-rc-69d4b800-20241021",
     "react-dom": "19.0.0-rc-69d4b800-20241021",
     "tailwind-merge": "2.5.4",
@@ -42,6 +47,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "4.3.3",
+    "drizzle-kit": "0.27.0",
     "eslint": "^8",
     "eslint-config-next": "15.0.1",
     "jsdom": "25.0.1",
