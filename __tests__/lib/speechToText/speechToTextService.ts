@@ -1,27 +1,21 @@
+import { OpenAISpeechToTextService } from '@/lib/speechToText/openaiSpeechToTextService'
 import {
   SpeechToTextService,
-  createTextFromAudio,
+  createSpeechToTextService,
 } from '@/lib/speechToText/speechToTextService'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
-const mockGeneratedText = 'Transcribed audio text'
+describe('createSpeechToTextService', () => {
+  it('should return an instance of OpenAISpeechToTextService for provider "openai"', () => {
+    const service: SpeechToTextService = createSpeechToTextService('openai')
 
-describe('createTextFromAudio', () => {
-  it('should call generateText with the correct text and return the generated text', async () => {
-    const mockText = 'Audio data'
+    // Verify the instance type
+    expect(service).toBeInstanceOf(OpenAISpeechToTextService)
+  })
 
-    const mockSpeechToTextService: SpeechToTextService = {
-      generateText: vi.fn().mockResolvedValue(mockGeneratedText),
-    }
-
-    const result = await createTextFromAudio({
-      text: mockText,
-      speechToTextService: mockSpeechToTextService,
-    })
-
-    expect(mockSpeechToTextService.generateText).toHaveBeenCalledOnce()
-    expect(mockSpeechToTextService.generateText).toHaveBeenCalledWith(mockText)
-
-    expect(result).toBe(mockGeneratedText)
+  it('should throw an error for unsupported provider', () => {
+    expect(() =>
+      createSpeechToTextService('unsupported' as never),
+    ).toThrowError('Unsupported provider: unsupported')
   })
 })

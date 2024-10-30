@@ -1,27 +1,20 @@
+import { OpenAITextToSpeechService } from '@/lib/textToSpeech/openaiTextToSpeechService'
 import {
   TextToSpeechService,
-  createAudioFromText,
+  createTextToSpeechService,
 } from '@/lib/textToSpeech/textToSpeechService'
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
-const mockBlob = new Blob(['audio data'], { type: 'audio/mpeg' })
+describe('createTextToSpeechService', () => {
+  it('should return an instance of OpenAITextToSpeechService for provider "openai"', () => {
+    const service: TextToSpeechService = createTextToSpeechService('openai')
 
-describe('createAudioFromText', () => {
-  it('should call generateAudio with the correct text and return the Blob', async () => {
-    const mockText = 'Hello, world!'
+    expect(service).toBeInstanceOf(OpenAITextToSpeechService)
+  })
 
-    const mockTextToSpeechService: TextToSpeechService = {
-      generateAudio: vi.fn().mockResolvedValue(mockBlob),
-    }
-
-    const result = await createAudioFromText({
-      text: mockText,
-      textToSpeechService: mockTextToSpeechService,
-    })
-
-    expect(mockTextToSpeechService.generateAudio).toHaveBeenCalledOnce()
-    expect(mockTextToSpeechService.generateAudio).toHaveBeenCalledWith(mockText)
-
-    expect(result).toBe(mockBlob)
+  it('should throw an error for unsupported provider', () => {
+    expect(() =>
+      createTextToSpeechService('unsupported' as never),
+    ).toThrowError('Unsupported provider: unsupported')
   })
 })

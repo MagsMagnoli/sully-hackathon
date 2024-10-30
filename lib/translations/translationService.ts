@@ -1,9 +1,12 @@
+import { GoogleTranslationService } from '@/lib/translations/googleTranslationService'
+import { z } from 'zod'
+
 export type Translation = {
   text: string
   language: string
 }
 
-export interface TranslateService {
+export interface TranslationService {
   detectLanguage: (text: string) => Promise<string>
   translateText: ({
     text,
@@ -14,28 +17,16 @@ export interface TranslateService {
   }) => Promise<Translation>
 }
 
-export async function translateText({
-  text,
-  languages,
-  translateService,
-}: {
-  text: string
-  languages: string[]
-  translateService: TranslateService
-}): Promise<Translation[]> {
-  const detectedLanguage = await translateService.detectLanguage(text)
+export const translationProviders = z.enum(['google'])
+export type TranslationProvider = z.infer<typeof translationProviders>
 
-  const translations = []
-
-  for (const language of languages) {
-    if (detectedLanguage !== language) {
-      const translation = await translateService.translateText({
-        text,
-        targetLanguage: language,
-      })
-      translations.push(translation)
-    }
+export function createTranslationService(
+  provider: TranslationProvider,
+): TranslationService {
+  switch (provider) {
+    case 'google':
+      return new GoogleTranslationService()
+    default:
+      throw new Error(`Unsupported provider: ${provider}`)
   }
-
-  return translations
 }

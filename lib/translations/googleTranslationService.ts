@@ -1,7 +1,7 @@
 import { v2 } from '@google-cloud/translate'
-import { TranslateService } from './translationService'
+import { TranslationService } from './translationService'
 
-export class GoogleTranslateService implements TranslateService {
+export class GoogleTranslationService implements TranslationService {
   private translate: v2.Translate
 
   constructor() {

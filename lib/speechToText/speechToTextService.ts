@@ -1,13 +1,20 @@
+import { OpenAISpeechToTextService } from '@/lib/speechToText/openaiSpeechToTextService'
+import { z } from 'zod'
+
 export interface SpeechToTextService {
   generateText(text: string): Promise<string>
 }
 
-export function createTextFromAudio({
-  text,
-  speechToTextService,
-}: {
-  text: string
-  speechToTextService: SpeechToTextService
-}) {
-  return speechToTextService.generateText(text)
+export const speechToTextProviders = z.enum(['openai'])
+export type SpeechToTextProvider = z.infer<typeof speechToTextProviders>
+
+export function createSpeechToTextService(
+  provider: SpeechToTextProvider,
+): SpeechToTextService {
+  switch (provider) {
+    case 'openai':
+      return new OpenAISpeechToTextService()
+    default:
+      throw new Error(`Unsupported provider: ${provider}`)
+  }
 }
