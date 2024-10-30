@@ -21,8 +21,8 @@ const ConversationSchema = z.object({
   conversationStatus: z.enum(conversationStatus.enumValues),
   doctorLanguage: z.enum(language.enumValues),
   patientLanguage: z.enum(language.enumValues),
-  summary: z.string().optional(),
-  messages: z.array(MessageSchema),
+  summary: z.string().nullable().optional(),
+  messages: z.array(MessageSchema).optional(),
   createdAt: z.date(),
 })
 
