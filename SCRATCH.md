@@ -59,6 +59,4 @@
 
 - pause button to suspend auto listen
 - conversation history
-
-
-
+- store audio files in cloud storage for future replay

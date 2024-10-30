@@ -1,8 +1,12 @@
 'use client'
 
-import { useMicVAD } from '@ricky0123/vad-react'
+import { useMicVAD, utils } from '@ricky0123/vad-react'
 
-export const AudioRecorder = () => {
+export const AudioRecorder = ({
+  onSpeechEnd,
+}: {
+  onSpeechEnd: (audio: string) => void
+}) => {
   const vad = useMicVAD({
     ortConfig(ort) {
       ort.env.wasm.wasmPaths = '/vad/'
@@ -11,7 +15,10 @@ export const AudioRecorder = () => {
     modelURL: '/vad/silero_vad.onnx',
     startOnLoad: true,
     onSpeechEnd: (audio) => {
-      console.log('User stopped talking', audio)
+      const wavBuffer = utils.encodeWAV(audio)
+      const base64 = utils.arrayBufferToBase64(wavBuffer)
+
+      onSpeechEnd(base64)
     },
   })
 
